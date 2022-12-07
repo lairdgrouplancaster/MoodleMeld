@@ -56,7 +56,7 @@ with open(dir_path + '\\' + KeyFileName, 'w', newline='') as keyfile:
     #Create anobject to merge the PDF files into
     merger = PdfFileMerger()
     
-    #Iterate through the student directories, merging pdf files together and recording their names and lengths in keyfile.csv
+    #Iterate through the student directories, merging pdf files together and recording their names and lengths in keyfile.csv. Write the output to MeldedPDF_unscaled.pdf
     for item in listOfDirectories:
         for file in os.listdir(dir_path + '\\' + item):
             readpdf = PyPDF2.PdfFileReader(dir_path + '\\' + item + '\\' + file)
@@ -67,7 +67,7 @@ with open(dir_path + '\\' + KeyFileName, 'w', newline='') as keyfile:
     merger.write(dir_path + '\\' +'MeldedPDF_unscaled.pdf')
     merger.close()
     
-    #Scale the pages in MeldedPDF.pdf to all have A4 width
+    #Scale the pages to all have A4 width by creating a new scaled PDF
     reader = PdfReader(dir_path + '\\' +'MeldedPDF_unscaled.pdf')
     writer = PdfWriter()
     
@@ -77,10 +77,12 @@ with open(dir_path + '\\' + KeyFileName, 'w', newline='') as keyfile:
         page.scale_to(595, 595 * float(page.mediabox.top) / float(page.mediabox.right))
         writer.add_page(page)
         print('Processing page ', x+1, ' of ', reader.numPages)
+        
+    os.remove(dir_path + '\\' +'MeldedPDF_unscaled.pdf')
     
+    #Write the scaled PDF as our final output.
     with open(dir_path + '\\' + MeldedFileName, "wb") as fp:
         writer.write(fp)
         
-    #writer.close()
-    os.remove(dir_path + '\\' +'MeldedPDF_unscaled.pdf')
+    
     

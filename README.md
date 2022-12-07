@@ -14,7 +14,8 @@ As a marker, when you download a set of submissions from Moodle you will find ea
 3. Run `Meld.py`
 4. Mark the combined PDF that gets created. (You may want to change its name, to prevent an accidental overwrite.)
 5. If you used Acrobat, it seems to be necessary to print the file to PDF to ensure that your annotations get unpacked properly. The new file is the one you should unmeld.
-6. In `Unmeld.py`, make sure that `dir_path` and `MarkedFileName` point to the marked file.
-7. In `Unmeld.py`, check MyInitials is correct.
+6. In `Unmeld.py`:
+    1. Make sure that `dir_path` and `MarkedFileName` point to the marked file.
+    2. Check `MyInitials` is correct.
 8. Run `Unmeld.py`
 9. Compress and upload the unmelded directory to Moodle as normal.

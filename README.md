@@ -1,7 +1,7 @@
 # MoodleMeld
 
 MoodleMeld is a pair of Python scripts to speed up marking PDFs from Moodle.
-As a marker, when you download a set of submissions from Moodle you will find each one in its own PDF, grouped into one directory for each student. Open and closing all these PDFs is annoying.
+As a marker, when you download a set of submissions from Moodle you will find each one in its own PDF, grouped into one directory for each student. Opening and closing all these PDFs is annoying.
 
 - The script `Meld.py` merges all these PDFs into a single file.
 

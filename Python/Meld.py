@@ -13,11 +13,13 @@ from PyPDF2 import PdfFileMerger, PdfWriter, PdfReader
 #Declare constants
 
 # Folder path: the name of the folder you want to meld
-dir_path = r'C:\Users\lairde\OneDrive - Lancaster University\OneDrive Documents\Teaching\Lecturing\PHYS102\2022\Worksheets\Worksheet 3\Marking\LairdTest'
+dir_path = r'C:\Users\lairde\OneDrive - Lancaster University\OneDrive Documents\Teaching\Lecturing\PHYS102\2022\Worksheets\Worksheet 4\Marking\Laird'
 #Key file: CSV containing information about the files that were melded
 KeyFileName = 'keyfile.csv'
 #Melded fild name: Name of melded file that you want to create
 MeldedFileName = 'MeldedPDF.pdf'
+#Expected number of files per directory. Usually this is 1 or 2, but some students upload many files.
+expectedNumFiles=range (1,100)
 
 
 def numItems(root_path, path):
@@ -37,7 +39,7 @@ def numItems(root_path, path):
             return -1
     # Warn if the count is outside the expected range.
     # The expected range is 1..2; one file for the submission, possibly one for the ILSP cover sheet
-    if (count < 1) or (count > 2):
+    if count not in expectedNumFiles:
         print('Warning: Directory \'' + path + '\' contains unexpected number of files', count)
     return count
     
@@ -47,8 +49,8 @@ listOfItems = os.listdir(dir_path)
 # Remove everything that isn't a directory
 listOfDirectories = list(filter(lambda item: os.path.isdir(dir_path+'\\'+item), listOfItems))
 
-# Remove everything that contains the wrong number of files
-listOfDirectories = list(filter(lambda item: 1 <= numItems(dir_path, item) <= 2, listOfDirectories))
+# Remove everything that contains an unexpected number of files
+listOfDirectories = list(filter(lambda item: numItems(dir_path, item) in expectedNumFiles, listOfDirectories))
 
 with open(dir_path + '\\' + KeyFileName, 'w', newline='') as keyfile:
     writer = csv.writer(keyfile)

@@ -38,7 +38,7 @@ def numItems(root_path, path):
             print('Warning: Directory \'' + path + '\' contains an unexpected sub-folder')
             return -1
     # Warn if the count is outside the expected range.
-    # The expected range is 1..2; one file for the submission, possibly one for the ILSP cover sheet
+    # The expected range is 1..2; one file for the submission, possibly one for the ILSP cover sheet. A very large number may indicate a problem.
     if count not in expectedNumFiles:
         print('Warning: Directory \'' + path + '\' contains unexpected number of files', count)
     return count

@@ -14,7 +14,7 @@ from PyPDF2.generic import AnnotationBuilder
 #Declare constants
 
 # Folder path: the name of the folder you want to meld
-dir_path = r'C:\Users\lairde\OneDrive - Lancaster University\OneDrive Documents\Teaching\Lecturing\PHYS102\2022\Worksheets\Worksheet 3\Marking\LairdTest'
+dir_path = r'C:\Users\lairde\OneDrive - Lancaster University\OneDrive Documents\Teaching\Lecturing\PHYS102\2022\Worksheets\Worksheet 4\Marking\Laird'
 #Melded fild name: File containing marked work that you want to unmeld
 MarkedFileName = 'Marked.pdf'
 #Key file: CSV containing information about the files that were melded

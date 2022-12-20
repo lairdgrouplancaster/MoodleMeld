@@ -13,7 +13,7 @@ from PyPDF2 import PdfFileMerger, PdfWriter, PdfReader
 #Declare constants
 
 # Folder path: the name of the folder you want to meld
-dir_path = r'C:\Users\lairde\OneDrive - Lancaster University\OneDrive Documents\Teaching\Lecturing\PHYS102\2022\Worksheets\Worksheet 4\Marking\Laird'
+dir_path = r'C:\Users\lairde\OneDrive - Lancaster University\OneDrive Documents\Teaching\Lecturing\PHYS102\2022\Worksheets\Worksheet 4\Marking\Lates'
 #Key file: CSV containing information about the files that were melded
 KeyFileName = 'keyfile.csv'
 #Melded fild name: Name of melded file that you want to create
@@ -83,7 +83,7 @@ with open(dir_path + '\\' + KeyFileName, 'w', newline='') as keyfile:
     os.remove(dir_path + '\\' +'MeldedPDF_unscaled.pdf')
     
     #Write the scaled PDF as our final output.
-    with open(dir_path + '\\' + MeldedFileName, "wb") as fp:
+    with open(dir_path + '\\' + MeldedFileName, "xb") as fp:
         writer.write(fp)
         
     

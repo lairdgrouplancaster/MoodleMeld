@@ -13,7 +13,7 @@ As a marker, when you download a set of submissions from Moodle you will find ea
 2. In `Meld.py`, edit the `dir_path` string to point to the directory where the submissions are stored.
 3. Run `Meld.py`
 4. Mark the combined PDF that gets created.
-5. If you used Acrobat, it seems to be necessary to print the file to PDF to ensure that your annotations get unpacked properly. The new file is the one you should unmeld.
+5. If you marked in Acrobat, it seems to be necessary to print the file to PDF to ensure that your annotations get unpacked properly. The new file is the one you should unmeld.
 6. In `Unmeld.py`:
     1. Make sure that `dir_path` and `MarkedFileName` point to the marked file.
     2. Check `MyInitials` is correct.

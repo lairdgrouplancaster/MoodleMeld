@@ -36,7 +36,7 @@ def safe_open_w(path):
 with open(dir_path + '\\' + KeyFileName, 'r', newline='') as keyfile:
     reader = csv.reader(keyfile)
     
-    # Iterate over each row in the csv file using reader object
+    # Iterate over each row in the csv file
     MeldedPagesRead = 0
     for row in reader:
         with open(dir_path + '\\' + MarkedFileName, 'rb') as infile:
@@ -52,12 +52,10 @@ with open(dir_path + '\\' + KeyFileName, 'r', newline='') as keyfile:
             annotation = AnnotationBuilder.free_text(
                 MyInitials,  #Marker's initials
                 rect=(20, 20, 60, 40),
-                font="Arial",
                 bold=True,
                 font_size="16pt",
                 font_color="ff0000",
                 border_color="ff0000",
-                #background_color="cdcdcd",
                 )
             writer.add_annotation(page_number=0, annotation=annotation)
             

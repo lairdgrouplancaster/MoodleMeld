@@ -8,20 +8,20 @@ Created on Thu Dec  1 18:11:22 2022
 import os, os.path
 import csv
 #import PyPDF2
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfReader, PdfWriter
 from PyPDF2.generic import AnnotationBuilder
 
 #Declare constants
 
 # Folder path: the name of the folder you want to meld
-dir_path = r'C:\Users\lairde\OneDrive - Lancaster University\OneDrive Documents\Teaching\Lecturing\PHYS102\2022\Worksheets\Worksheet 4\Marking\Lates'
+dir_path = r'C:\Users\lairde\OneDrive - Lancaster University\OneDrive Documents\Teaching\Lecturing\PHYS102\2022\Exam\Marking\Submitted'
 #Melded fild name: File containing marked work that you want to unmeld
-MarkedFileName = 'Marked.pdf'
+MarkedFileName = 'MeldedPDF.pdf'
 #Key file: CSV containing information about the files that were melded
 KeyFileName = 'keyfile.csv'
 #Your initials
 MyInitials = 'EAL'
-#Maximum length of file name ofr unmelded files. Make this number small if you find yourself creating very long path names.
+#Maximum length of file name of unmelded files. Make this number small if you find yourself creating very long path names.
 MaxFileNameChars = 20
 
 
@@ -41,11 +41,13 @@ with open(dir_path + '\\' + KeyFileName, 'r', newline='') as keyfile:
     for row in reader:
         with open(dir_path + '\\' + MarkedFileName, 'rb') as infile:
             #Extract the appropriate number of pages from the melded PDF
-            reader = PdfFileReader(infile)
-            writer = PdfFileWriter()
+            reader = PdfReader(infile)
+            writer = PdfWriter()
             numPages = int(row[2])
             for PageInOutput in range(numPages):
-                writer.addPage(reader.getPage(MeldedPagesRead + PageInOutput))
+      #           h="h"
+                writer.add_page(reader.pages[MeldedPagesRead + PageInOutput])
+#                writer.addPage(reader.pages(MeldedPagesRead + PageInOutput))
             MeldedPagesRead += numPages
             
             # Create the annotation and add it

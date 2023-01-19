@@ -71,8 +71,7 @@ with open(dir_path + '\\' + KeyFileName, 'w', newline='') as keyfile:
             readPages = readpdf.numPages
             line = [item, file, readPages]
             writer.writerow(line)
-            merger.append(dir_path + '\\' + item + '\\' + file)
-            
+            merger.append(dir_path + '\\' + item + '\\' + file)        
     merger.write(dir_path + '\\' +'MeldedPDF_unscaled.pdf')
     merger.close()
     

@@ -7,21 +7,21 @@ Created on Thu Dec  1 18:11:22 2022
 
 import os, os.path
 import csv
-#import PyPDF2
-from PyPDF2 import PdfReader, PdfWriter
-from PyPDF2.generic import AnnotationBuilder
+#import pypdf
+from pypdf import PdfReader, PdfWriter
+from pypdf.annotations import FreeText
 
 #Declare constants
 
 # Folder path: the name of the folder you want to meld
-dir_path = r'C:\Users\lairde\OneDrive - Lancaster University\OneDrive Documents\Teaching\Lecturing\PHYS102\2022\Exam\Marking\Submitted'
+dir_path = r'C:\Users\lairde\OneDrive - Lancaster University\OneDrive Documents\Teaching\Lecturing\PHYS102\2022\Laird'
 #Melded fild name: File containing marked work that you want to unmeld
 MarkedFileName = 'MeldedPDF.pdf'
 #Key file: CSV containing information about the files that were melded
 KeyFileName = 'keyfile.csv'
 #Your initials
 MyInitials = 'EAL'
-#Maximum length of file name of unmelded files. Make this number small if you find yourself creating very long path names.
+#Maximum length of file name ofr unmelded files. Make this number small if you find yourself creating very long path names.
 MaxFileNameChars = 20
 
 
@@ -36,7 +36,7 @@ def safe_open_w(path):
 with open(dir_path + '\\' + KeyFileName, 'r', newline='') as keyfile:
     reader = csv.reader(keyfile)
     
-    # Iterate over each row in the csv file
+    # Iterate over each row in the csv file using reader object
     MeldedPagesRead = 0
     for row in reader:
         with open(dir_path + '\\' + MarkedFileName, 'rb') as infile:
@@ -45,19 +45,19 @@ with open(dir_path + '\\' + KeyFileName, 'r', newline='') as keyfile:
             writer = PdfWriter()
             numPages = int(row[2])
             for PageInOutput in range(numPages):
-      #           h="h"
                 writer.add_page(reader.pages[MeldedPagesRead + PageInOutput])
-#                writer.addPage(reader.pages(MeldedPagesRead + PageInOutput))
             MeldedPagesRead += numPages
             
-            # Create the annotation and add it
-            annotation = AnnotationBuilder.free_text(
-                MyInitials,  #Marker's initials
+            # Annotate the first page bottom left, e.g. with the marker's initials
+            annotation = FreeText(
+                text=MyInitials,  #Marker's initials
                 rect=(20, 20, 60, 40),
+                font="Arial",
                 bold=True,
                 font_size="16pt",
                 font_color="ff0000",
                 border_color="ff0000",
+                #background_color="cdcdcd",
                 )
             writer.add_annotation(page_number=0, annotation=annotation)
             

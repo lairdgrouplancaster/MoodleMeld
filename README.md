@@ -19,7 +19,7 @@ This program merges all these PDFs into a single file. After you have marked it,
 4. MoodleMeld will now create a file 'melded_PDF.pdf'. Copy this and mark it.
 ### To unmeld your submissions:
 1. Start the graphical interface as above.
-2. Click on `Meld`. Select your marked PDF (which needs to be in the same folder as the `keyfile.csv` created during melding).
+2. Click on `Unmeld`. Select your marked PDF (which needs to be in the same folder as the `keyfile.csv` created during melding).
 3. MoodleMeld will now separate your marked PDF into its original directories, but containing your annotations.
 ### Options
 - If you want to see student names (as well as numbers) on the melded PDF, tick "Show student names on melded file" during melding.

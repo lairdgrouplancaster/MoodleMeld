@@ -15,7 +15,7 @@ import tkinter as tk
 # -----------------------------
 KEY_FILE_NAME = "key_file.csv"
 MELDED_FILE_NAME = "melded_PDF.pdf"
-OVERWRITE_ALLOWED = True  # Whether to allow overwrite of melded PDF.
+OVERWRITE_ALLOWED = False  # Whether to allow overwrite of melded PDF.
 EXPECTED_NUM_FILES = range(1, 10)  # Expected number of files submitted by each student
 WARNING_FILE_SIZE_MB = 10  # Warn if submitted file is bigger than this
 WARNING_ANNOTATION_COUNT = 5  # Warn if PDF contains more than this number of annotations

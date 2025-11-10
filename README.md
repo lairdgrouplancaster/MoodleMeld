@@ -16,7 +16,7 @@ This program merges all these PDFs into a single file. After you have marked it,
 1. Download your marking folder from Moodle as usual and unzip it.
 2. Start the graphical interface as above.
 3. Click on `Meld`. Select your marking folder.
-4. MoodleMeld will now create a file 'melded_PDF.pdf'. Copy this and mark it.
+4. MoodleMeld will now create a file `melded_PDF.pdf`. Copy this and mark it.
 ### To unmeld your submissions:
 1. Start the graphical interface as above.
 2. Click on `Unmeld`. Select your marked PDF (which needs to be in the same folder as the `keyfile.csv` created during melding).

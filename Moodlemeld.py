@@ -1,12 +1,14 @@
 import os
 import traceback
+from typing import Optional
+
 import tkinter as tk
 from tkinter import ttk, filedialog as fd, messagebox as mb
 
 from Meld import meld
 from Unmeld import unmeld
 
-def moodlemeld():
+def moodlemeld(initials: Optional[str] = None) -> None:
     """Create and run the MoodleMeld dialog window."""
 
     def log(message: str, newline=True):
@@ -91,6 +93,10 @@ def moodlemeld():
     zip_unmelded_folder = tk.BooleanVar()
 
     status_text = tk.Text(root, height=6, width=50, wrap='word')
+
+    show_student_names.set(True)
+    zip_unmelded_folder.set(True)
+    marker_initials.set(initials)
 
     create_widgets()
 

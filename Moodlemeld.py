@@ -31,9 +31,7 @@ def moodlemeld(initials: Optional[str] = None) -> None:
             title="Choose folder or ZIP file to meld",
             initialdir=os.getcwd(),
             filetypes=(
-                ("All files", "*.*"),
-                ("Folders", ""),            # enables folder selection on some OSes
-                ("Zip files", "*.zip")
+                ("Folders or ZIP", "*"),
             )
         )
 
@@ -99,22 +97,27 @@ def moodlemeld(initials: Optional[str] = None) -> None:
         # Meld and Unmeld buttons
         ttk.Button(root, text='Meld...', command=select_folder).grid(row=1, column=1, sticky='ew', padx=5, pady=5)
         ttk.Button(root, text='Unmeld...', command=select_file).grid(row=1, column=2, sticky='ew', padx=5, pady=5)
-
+    
         # Marker initials input
         ttk.Label(root, text="Marker initials:").grid(row=2, column=1, sticky='e', pady=(5, 10))
         ttk.Entry(root, width=5, textvariable=marker_initials).grid(row=2, column=2, sticky='w', pady=(5, 10))
-
-        # Checkbuttons for options
-        ttk.Checkbutton(root, text="Show student names on melded file", variable=show_student_names).grid(
-            row=3, column=1, columnspan=2, sticky='w', padx=5
-        )
-        ttk.Checkbutton(root, text="Zip unmelded folder", variable=zip_unmelded_folder).grid(
-            row=4, column=1, columnspan=2, sticky='w', padx=5
-        )
-
-        # Status text box
+    
+        # Checkbuttons
+        ttk.Checkbutton(root, text="Show student names on melded file",
+                        variable=show_student_names).grid(row=3, column=1, columnspan=2, sticky='w', padx=5)
+        ttk.Checkbutton(root, text="Zip unmelded folder",
+                        variable=zip_unmelded_folder).grid(row=4, column=1, columnspan=2, sticky='w', padx=5)
+    
+        # --- Status text box + Scrollbar ---
+        scroll = ttk.Scrollbar(root, orient="vertical", command=status_text.yview)
+        status_text.configure(yscrollcommand=scroll.set)
+    
         status_text.grid(row=6, column=1, columnspan=2, padx=5, pady=10, sticky='nsew')
+        scroll.grid(row=6, column=3, sticky='ns')   # <-- Add scrollbar in column 3
+    
+        # Make row 6 resize with window
         root.rowconfigure(6, weight=1)
+
 
     root = tk.Tk()
     root.title('MoodleMeld')
@@ -124,15 +127,11 @@ def moodlemeld(initials: Optional[str] = None) -> None:
     root.columnconfigure(1, weight=1)
     root.columnconfigure(2, weight=1)
 
-    marker_initials = tk.StringVar()
-    show_student_names = tk.BooleanVar()
-    zip_unmelded_folder = tk.BooleanVar()
+    marker_initials      = tk.StringVar(value=initials)
+    show_student_names   = tk.BooleanVar(value=True)
+    zip_unmelded_folder  = tk.BooleanVar(value=True)
 
     status_text = tk.Text(root, height=6, width=50, wrap='word')
-
-    show_student_names.set(True)
-    zip_unmelded_folder.set(True)
-    marker_initials.set(initials)
 
     create_widgets()
 

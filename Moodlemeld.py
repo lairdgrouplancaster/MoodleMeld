@@ -1,5 +1,8 @@
 import os
 import traceback
+import zipfile
+import tempfile
+import shutil
 from typing import Optional
 
 import tkinter as tk
@@ -23,13 +26,45 @@ def moodlemeld(initials: Optional[str] = None) -> None:
         log(f"Error: {err}")
 
     def select_folder():
-        folder = fd.askdirectory(
-            title='Choose folder to meld',
-            mustexist=True,
-            initialdir=os.getcwd()
+        # Allow user to select either a folder or a ZIP file
+        path = fd.askopenfilename(
+            title="Choose folder or ZIP file to meld",
+            initialdir=os.getcwd(),
+            filetypes=(
+                ("All files", "*.*"),
+                ("Folders", ""),            # enables folder selection on some OSes
+                ("Zip files", "*.zip")
+            )
         )
-        if not folder:
+
+        # ---- Handle selected file or folder ----
+        if not path:
             return
+        if os.path.isdir(path): # If it's a directory
+            folder = path
+        elif path.lower().endswith(".zip"): # If it's a ZIP file — extract next to the ZIP
+            try:
+                zip_dir = os.path.dirname(path)
+                base_name = os.path.splitext(os.path.basename(path))[0]
+                temp_dir = os.path.join(zip_dir, f"{base_name}_unzipped")
+                # If folder exists (from a previous run), wipe it first
+                if os.path.exists(temp_dir):
+                    shutil.rmtree(temp_dir)
+                os.makedirs(temp_dir)
+    
+                with zipfile.ZipFile(path, "r") as z:
+                    z.extractall(temp_dir)
+                folder = temp_dir
+                log(f"📦 Extracted ZIP to: {temp_dir}")
+            except Exception as e:
+                show_error("Failed to unzip file", e)
+                log(f"❌ Failed to unzip: {e}")
+                return
+        else:
+            show_error("Invalid selection", "Please choose a folder or ZIP file.")
+            return
+            
+        # ---- Run meld() ----
         try:
             meld(
                 folder,
@@ -39,6 +74,7 @@ def moodlemeld(initials: Optional[str] = None) -> None:
             log("Done.")
         except Exception as e:
             show_error("Melding failed", e)
+            log(f"❌ Error: {e}")
 
     def select_file():
         filetypes = (('PDF files', '*.pdf'), ('All files', '*.*'))

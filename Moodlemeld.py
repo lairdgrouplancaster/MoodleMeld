@@ -10,26 +10,35 @@ from tkinter import ttk, filedialog as fd, messagebox as mb
 
 from Meld import meld
 from Unmeld import unmeld
+from Meldlogging import log
 
+# ================================================================
+# Main Entry
+# ================================================================
 def moodlemeld(initials: Optional[str] = None) -> None:
     """Create and run the MoodleMeld dialog window."""
 
-    def log(message: str, newline=True):
-        end_char = "\n" if newline else ""
-        status_text.insert(tk.END, message + end_char)
-        status_text.see(tk.END)
-        status_text.update_idletasks()
+    # Remember last directory
+    last_dir = os.getcwd()
 
+    # ================================================================
+    # Error reporting
+    # ================================================================
     def show_error(title: str, err: Exception):
         tb = traceback.format_exc()
         mb.showerror(title, f"{err}\n\nDetails:\n{tb}")
-        log(f"Error: {err}")
+        log(f"Error: {err}", status_text)
 
-    def select_folder():
-        # Allow user to select either a folder or a ZIP file
+        
+    # ================================================================
+    # Select a folder to be melded
+    # ================================================================
+    def select_meld():
+        nonlocal last_dir
+        
         path = fd.askopenfilename(
             title="Choose folder or ZIP file to meld",
-            initialdir=os.getcwd(),
+            initialdir=last_dir,
             filetypes=(
                 ("Folders or ZIP", "*"),
             )
@@ -38,6 +47,10 @@ def moodlemeld(initials: Optional[str] = None) -> None:
         # ---- Handle selected file or folder ----
         if not path:
             return
+
+        # update memory
+        last_dir = os.path.dirname(path)
+        
         if os.path.isdir(path): # If it's a directory
             folder = path
         elif path.lower().endswith(".zip"): # If it's a ZIP file — extract next to the ZIP
@@ -53,14 +66,15 @@ def moodlemeld(initials: Optional[str] = None) -> None:
                 with zipfile.ZipFile(path, "r") as z:
                     z.extractall(temp_dir)
                 folder = temp_dir
-                log(f"📦 Extracted ZIP to: {temp_dir}")
+                log(f"📦 Extracted ZIP to: {temp_dir}", status_text)
             except Exception as e:
                 show_error("Failed to unzip file", e)
-                log(f"❌ Failed to unzip: {e}")
+                log(f"❌ Failed to unzip: {e}", status_text)
                 return
         else:
             show_error("Invalid selection", "Please choose a folder or ZIP file.")
             return
+            filename
             
         # ---- Run meld() ----
         try:
@@ -69,20 +83,31 @@ def moodlemeld(initials: Optional[str] = None) -> None:
                 show_student_names.get(),
                 status_widget=status_text
             )
-            log("Done.")
+            log("Done.", status_text)
         except Exception as e:
             show_error("Melding failed", e)
-            log(f"❌ Error: {e}")
+            log(f"❌ Error: {e}", status_text)
 
-    def select_file():
+    
+    # ================================================================
+    # Select a file to be unmelded
+    # ================================================================
+    def select_unmeld():
+        nonlocal last_dir
+        
         filetypes = (('PDF files', '*.pdf'), ('All files', '*.*'))
         filename = fd.askopenfilename(
             title='Choose file to unmeld',
-            initialdir=os.getcwd(),
+            initialdir=last_dir,
             filetypes=filetypes
         )
         if not filename:
             return
+
+        # update memory
+        last_dir = os.path.dirname(filename)
+        
+        # ---- Run unmeld() ----
         try:
             unmeld(
                 filename,
@@ -93,10 +118,14 @@ def moodlemeld(initials: Optional[str] = None) -> None:
         except Exception as e:
             show_error("Unmelding failed", e)
 
+    
+    # ================================================================
+    # Build the GUI
+    # ================================================================
     def create_widgets():
         # Meld and Unmeld buttons
-        ttk.Button(root, text='Meld...', command=select_folder).grid(row=1, column=1, sticky='ew', padx=5, pady=5)
-        ttk.Button(root, text='Unmeld...', command=select_file).grid(row=1, column=2, sticky='ew', padx=5, pady=5)
+        ttk.Button(root, text='Meld...', command=select_meld).grid(row=1, column=1, sticky='ew', padx=5, pady=5)
+        ttk.Button(root, text='Unmeld...', command=select_unmeld).grid(row=1, column=2, sticky='ew', padx=5, pady=5)
     
         # Marker initials input
         ttk.Label(root, text="Marker initials:").grid(row=2, column=1, sticky='e', pady=(5, 10))

@@ -6,29 +6,19 @@ from pypdf import PdfReader, PdfWriter
 from pypdf.annotations import FreeText
 import tkinter as tk
 
-# --------------------------------------------------------------------
+from Meldlogging import log
+
+# ================================================================
 # Constants
-# --------------------------------------------------------------------
+# ================================================================
 KEY_FILE_NAME = "key_file.csv"
 UNMELDED_FOLDER_NAME = "Unmelded"
 MAX_FILE_NAME_CHARS = 20  # Limit to avoid overly long paths
 
-# --------------------------------------------------------------------
-# Logging helper
-# --------------------------------------------------------------------
-def log(message: str, status_widget: Optional[tk.Text] = None) -> None:
-    """Log message to status_widget if provided, else print."""
-    if status_widget:
-        status_widget.insert(tk.END, message + "\n")
-        status_widget.see(tk.END)
-        status_widget.update_idletasks()
-    else:
-        print(message)
 
-
-# --------------------------------------------------------------------
+# ================================================================
 # Helpers
-# --------------------------------------------------------------------
+# ================================================================
 def safe_open_w(path: Path):
     """Open `path` for writing in binary mode, creating parent dirs if needed."""
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -59,9 +49,9 @@ def annotate(pdf_path: Path, initials: str) -> None:
         writer.write(f)
 
 
-# --------------------------------------------------------------------
+# ================================================================
 # Main unmeld function
-# --------------------------------------------------------------------
+# ================================================================
 def unmeld(
     pdf_to_unmeld: str,
     initials: str = "",

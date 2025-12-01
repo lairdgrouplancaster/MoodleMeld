@@ -9,6 +9,8 @@ from pypdf import PdfWriter, PdfReader
 from pypdf.annotations import FreeText
 from pypdf.generic import RectangleObject
 
+from Meldlogging import log
+
 # ================================================================
 # Constants
 # ================================================================
@@ -20,19 +22,6 @@ EXPECTED_NUM_FILES = range(1, 10)
 
 WARNING_FILE_SIZE_MB = 10
 WARNING_ANNOTATION_COUNT = 5
-
-
-# ================================================================
-# Logging Helper
-# ================================================================
-def log(message: str, widget: Optional[tk.Text] = None) -> None:
-    """Write a log message to a Tk.Text widget or stdout."""
-    if widget:
-        widget.insert(tk.END, message + "\n")
-        widget.see(tk.END)
-        widget.update_idletasks()
-    else:
-        print(message)
 
 
 # ================================================================
@@ -256,6 +245,8 @@ def meld(folder: str, show_student_names: bool, status_widget: Optional[tk.Text]
 
     if not students:
         return log("⚠️ No valid student folders found.", status_widget)
+
+    students.sort(key=lambda p: p.name.lower())
 
     log(f"Starting meld from: {folder.resolve()}", status_widget)
 

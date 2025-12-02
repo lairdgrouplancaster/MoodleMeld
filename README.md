@@ -7,7 +7,7 @@ This program merges all these PDFs into a single file. After you have marked it,
 
 ## How to install MoodleMeld
 1. Download the files in this repository.
-2. In a Python environment in which you have installed `pypdf', start JupyterLab and open the notebook `Demo.ipynb`.
+2. In a Python environment in which you have installed `pypdf`, start JupyterLab and open the notebook `Demo.ipynb`.
 3. Run the first cell to start the graphical interface.
 4. Practice melding and unmelding the `Sample data' folder, which has the same format as a Moodle download.
 

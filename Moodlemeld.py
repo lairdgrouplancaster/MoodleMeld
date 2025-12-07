@@ -3,6 +3,7 @@ import traceback
 import zipfile
 import tempfile
 import shutil
+import sys
 from typing import Optional
 
 import tkinter as tk
@@ -60,7 +61,12 @@ def moodlemeld(initials: Optional[str] = None) -> None:
                 temp_dir = os.path.join(zip_dir, f"{base_name}_unzipped")
                 # If folder exists (from a previous run), wipe it first
                 if os.path.exists(temp_dir):
-                    shutil.rmtree(temp_dir)
+                    try:
+                        shutil.rmtree(temp_dir)
+                    except PermissionError:
+                        log(f"⚠ Unzip folder was previously created and is noein use (probably by OneDrive): {temp_dir}", status_text)
+                        log(f"To make meld work, delete this folder manually.", status_text)
+                        return
                 os.makedirs(temp_dir)
     
                 with zipfile.ZipFile(path, "r") as z:
@@ -87,7 +93,7 @@ def moodlemeld(initials: Optional[str] = None) -> None:
         except Exception as e:
             show_error("Melding failed", e)
             log(f"❌ Error: {e}", status_text)
-
+    
     
     # ================================================================
     # Select a file to be unmelded
@@ -120,47 +126,67 @@ def moodlemeld(initials: Optional[str] = None) -> None:
 
     
     # ================================================================
+    # Open the working directory in Explorer/Finder
+    # ================================================================
+    def open_working_dir():
+        nonlocal last_dir
+        if sys.platform == "win32": # Windows
+            os.startfile(last_dir)
+        elif sys.platform == "darwin": # macOS
+            subprocess.run(['open', last_dir], check=True)
+        else: # Linux (using xdg-open, common on most distros)
+            subprocess.run(['xdg-open', last_dir], check=True) # This is what Gemini recommends; I have no idea whether it works
+
+    
+    # ================================================================
     # Build the GUI
     # ================================================================
     def create_widgets():
-        # Meld and Unmeld buttons
-        ttk.Button(root, text='Meld...', command=select_meld).grid(row=1, column=1, sticky='ew', padx=5, pady=5)
-        ttk.Button(root, text='Unmeld...', command=select_unmeld).grid(row=1, column=2, sticky='ew', padx=5, pady=5)
+        # Meld, Unmeld, and Open Working Directory buttons
+        ttk.Button(root, text='Meld...', command=select_meld)\
+            .grid(row=1, column=1, sticky='ew', padx=5, pady=5)
+        ttk.Button(root, text='Unmeld...', command=select_unmeld)\
+            .grid(row=1, column=2, sticky='ew', padx=5, pady=5)
+        ttk.Button(root, text='Open working directory', command=open_working_dir)\
+            .grid(row=1, column=3, sticky='ew', padx=5, pady=5)
     
-        # Marker initials input
+        # Marker initials
         ttk.Label(root, text="Marker initials:").grid(row=2, column=1, sticky='e', pady=(5, 10))
-        ttk.Entry(root, width=5, textvariable=marker_initials).grid(row=2, column=2, sticky='w', pady=(5, 10))
+        ttk.Entry(root, width=5, textvariable=marker_initials)\
+            .grid(row=2, column=2, sticky='w', pady=(5, 10))
     
         # Checkbuttons
         ttk.Checkbutton(root, text="Show student names on melded file",
-                        variable=show_student_names).grid(row=3, column=1, columnspan=2, sticky='w', padx=5)
+                        variable=show_student_names)\
+            .grid(row=3, column=1, columnspan=3, sticky='w', padx=5)
         ttk.Checkbutton(root, text="Zip unmelded folder",
-                        variable=zip_unmelded_folder).grid(row=4, column=1, columnspan=2, sticky='w', padx=5)
+                        variable=zip_unmelded_folder)\
+            .grid(row=4, column=1, columnspan=3, sticky='w', padx=5)
     
-        # --- Status text box + Scrollbar ---
+        # Text box and Scrollbar
         scroll = ttk.Scrollbar(root, orient="vertical", command=status_text.yview)
         status_text.configure(yscrollcommand=scroll.set)
     
-        status_text.grid(row=6, column=1, columnspan=2, padx=5, pady=10, sticky='nsew')
-        scroll.grid(row=6, column=3, sticky='ns')   # <-- Add scrollbar in column 3
+        status_text.grid(row=6, column=1, columnspan=3, padx=5, pady=10, sticky='nsew')
+        scroll.grid(row=6, column=4, sticky='ns')
     
-        # Make row 6 resize with window
         root.rowconfigure(6, weight=1)
-
 
     root = tk.Tk()
     root.title('MoodleMeld')
     # TODO: root.iconbitmap('path_to_icon.ico')  # Optional: set window icon
-    root.geometry('610x300')
+    root.geometry('400x300')
     root.resizable(True, True)
     root.columnconfigure(1, weight=1)
     root.columnconfigure(2, weight=1)
+    root.columnconfigure(3, weight=1)
+    root.columnconfigure(4, weight=0)
 
     marker_initials      = tk.StringVar(value=initials)
     show_student_names   = tk.BooleanVar(value=True)
     zip_unmelded_folder  = tk.BooleanVar(value=True)
 
-    status_text = tk.Text(root, height=6, width=50, wrap='word')
+    status_text = tk.Text(root, height=6, width=30, wrap='word')
 
     create_widgets()
 

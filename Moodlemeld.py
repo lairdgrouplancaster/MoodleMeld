@@ -4,6 +4,7 @@ import zipfile
 import tempfile
 import shutil
 import sys
+import subprocess
 from typing import Optional
 
 import tkinter as tk

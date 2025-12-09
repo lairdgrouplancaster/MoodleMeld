@@ -4,6 +4,7 @@ import zipfile
 import tempfile
 import shutil
 import sys
+import subprocess
 from typing import Optional
 
 import tkinter as tk
@@ -20,8 +21,18 @@ def moodlemeld(initials: Optional[str] = None) -> None:
     """Create and run the MoodleMeld dialog window."""
 
     # Remember last directory
-    last_dir = os.getcwd()
-
+    last_dir_file = os.path.join(os.path.expanduser("~"), ".moodlemeld_lastdir")
+    if os.path.exists(last_dir_file):
+        try:
+            with open(last_dir_file, "r", encoding="utf-8") as f:
+                last_dir = f.read().strip()
+                if not os.path.isdir(last_dir):
+                    last_dir = os.getcwd()
+        except:
+            last_dir = os.getcwd()
+    else:
+        last_dir = os.getcwd()
+    
     # ================================================================
     # Error reporting
     # ================================================================
@@ -51,6 +62,8 @@ def moodlemeld(initials: Optional[str] = None) -> None:
 
         # update memory
         last_dir = os.path.dirname(path)
+        with open(last_dir_file, "w", encoding="utf-8") as f:
+            f.write(last_dir)
         
         if os.path.isdir(path): # If it's a directory
             folder = path
@@ -112,6 +125,8 @@ def moodlemeld(initials: Optional[str] = None) -> None:
 
         # update memory
         last_dir = os.path.dirname(filename)
+        with open(last_dir_file, "w", encoding="utf-8") as f:
+            f.write(last_dir)
         
         # ---- Run unmeld() ----
         try:

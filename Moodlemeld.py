@@ -206,3 +206,5 @@ def moodlemeld(initials: Optional[str] = None) -> None:
     create_widgets()
 
     root.mainloop()
+
+moodlemeld(initials="MKR")

@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import List, Tuple, Optional, Callable
 
 import tkinter as tk
+from tkinter import messagebox as mb
 from pypdf import PdfWriter, PdfReader
 from pypdf.annotations import FreeText
 from pypdf.generic import RectangleObject
@@ -17,7 +18,6 @@ from Meldlogging import log
 KEY_FILE_NAME = "key_file.csv"
 MELDED_FILE_NAME = "melded_PDF.pdf"
 
-OVERWRITE_ALLOWED = False
 EXPECTED_NUM_FILES = range(1, 10)
 
 WARNING_FILE_SIZE_MB = 10
@@ -234,8 +234,19 @@ def meld(folder: str, show_student_names: bool, status_widget: Optional[tk.Text]
     if not folder.is_dir():
         return log(f"❌ Folder does not exist: {folder}", status_widget)
 
-    if melded_pdf.exists() and not OVERWRITE_ALLOWED:
-        return log(f"❌ Output already exists: {melded_pdf}", status_widget)
+    if melded_pdf.exists():
+        try:
+            # Open with no truncation to detect locks
+            with open(melded_pdf, "ab"):
+                pass
+        except Exception:
+            return log(f"❌ Cannot overwrite '{melded_pdf}': file is currently in use.", status_widget)
+        answer = mb.askyesno(
+            "Overwrite existing PDF?",
+            f"The output file already exists:\n\n{melded_pdf}\n\nOverwrite it?"
+        )
+        if not answer:
+            return log("❌ Meld cancelled by user (file exists).", status_widget)
 
     # Gather valid student folders
     students = [

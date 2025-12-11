@@ -11,7 +11,7 @@ This program merges all these PDFs into a single file. After you have marked it,
 2. On Windows, run the executable `dist/Moodlemeld.exe` to start the graphical interface.
 3. Practice melding and unmelding the `Sample data` folder, which has the same format as a Moodle download.
 
-### Another way, to not run an .exe file from the internet
+### Another way, to not run my unsigned .exe file from the internet
 1. Download the files in this repository. (You can use GitHub Desktop, but you don't have to.)
 2. In a Python environment in which you have installed `pypdf`, start JupyterLab and open the notebook `Demo.ipynb`.
 4. Run the first cell to start the graphical interface. (Instructions further down the notebook tell you how to do other things.)

@@ -7,7 +7,7 @@ This program merges all these PDFs into a single file. After you have marked it,
 
 ## How to install MoodleMeld
 ### The easiest way
-1. Use GitHub Desktop to clone this repository.
+1. Use [GitHub Desktop](https://www.gitkraken.com/lp/github-integration) to clone this repository.
 2. On Windows, run the executable `dist/Moodlemeld.exe` to start the graphical interface
 3. Practice melding and unmelding the `Sample data` folder, which has the same format as a Moodle download.
 

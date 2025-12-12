@@ -189,7 +189,10 @@ def moodlemeld(initials: Optional[str] = None) -> None:
 
     root = tk.Tk()
     root.title('MoodleMeld')
-    root.iconbitmap('MoodleMeld.ico')
+    try:
+        root.iconbitmap('MoodleMeld.ico')
+    except:
+        pass
     root.geometry('400x300')
     root.resizable(True, True)
     root.columnconfigure(1, weight=1)

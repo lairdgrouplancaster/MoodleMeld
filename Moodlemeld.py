@@ -189,7 +189,7 @@ def moodlemeld(initials: Optional[str] = None) -> None:
 
     root = tk.Tk()
     root.title('MoodleMeld')
-    # TODO: root.iconbitmap('path_to_icon.ico')  # Optional: set window icon
+    root.iconbitmap('MoodleMeld.ico')
     root.geometry('400x300')
     root.resizable(True, True)
     root.columnconfigure(1, weight=1)

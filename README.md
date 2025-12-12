@@ -21,7 +21,7 @@ This program merges all these PDFs into a single file. After you have marked it,
 ### To meld your submissions:
 1. Download your zipped marking folder from Moodle as usual.
 2. Start the graphical interface as above.
-3. Click on `Meld...`. Select your marking folder.
+3. Click on `Meld...`. Select your zipped marking folder.
 4. MoodleMeld will now create a file `melded_PDF.pdf`.
 5. To see the file, click on `Open working directory`. Copy the file and mark it.
 ### To unmeld your submissions:
